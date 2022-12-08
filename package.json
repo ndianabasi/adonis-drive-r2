@@ -110,11 +110,11 @@
   "adonisjs": {
     "instructionsMd": "./build/instructions.md",
     "env": {
-      "R2_KEY": "dummyKey",
-      "R2_SECRET": "dummySecret",
-      "R2_ACCOUNT_ID": "dummySecret",
+      "R2_ACCESS_KEY_ID": "dummyKey",
+      "R2_SECRET_ACCESS_KEY": "dummySecret",
+      "R2_ACCOUNT_ID": "dummyAccountId",
       "R2_BUCKET": "dummyBucket",
-      "R2_PUBLIC_URL": "dummyEndpoint"
+      "R2_PUBLIC_URL": "dummyPublicUrl"
     },
     "types": "adonis-drive-r2",
     "providers": [

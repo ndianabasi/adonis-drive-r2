@@ -1,8 +1,10 @@
 The package has been configured successfully!
 
-## Validating environment variables
+> See full instructions [here](https://www.npmjs.com/package/adonis-drive-r2).
 
-The configuration for R2 relies on certain environment variables and it is usually a good practice to validate the presence of those environment variables.
+## Validating Environment Variables
+
+The configuration for R2 driver relies on certain environment variables and it is usually a good practice to validate the presence of those environment variables.
 
 Open `env.ts` file and paste the following code inside it.
 
@@ -20,7 +22,7 @@ Update DRIVE_DISK
 ```
 
 
-## Define config
+## Define a New Disk for R2 Driver
 Open the `config/drive.ts` and paste the following code snippet inside it.
 
 ```ts
@@ -36,6 +38,24 @@ Open the `config/drive.ts` and paste the following code snippet inside it.
       bucket: Env.get('R2_BUCKET'),
       accountId: Env.get('R2_ACCOUNT_ID'),
       cdnUrl: Env.get('R2_PUBLIC_URL')
+    }
+  }
+}
+```
+
+> Note that the `cdnUrl` property of this R2 config (which maps to the public URl of your bucket) is required when the `visibility` of the disk is `public`.
+
+## Improve your Drive Contract
+
+Open the `contracts/drive.ts` file. Add the name of the new disk to the `DisksList` interface
+
+```typescript
+declare module '@ioc:Adonis/Core/Drive' {
+  interface DisksList {
+    // ... other disks
+    r2: {
+      config: R2DriverConfig // <-- Make sure to use the `R2DriverConfig` interface
+      implementation: R2DriverContract // <-- Make sure to use the `R2DriverContract` interface
     }
   }
 }
