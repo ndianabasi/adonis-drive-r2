@@ -29,10 +29,11 @@ dotEnvConfig()
 
 const R2_ACCESS_KEY_ID = process.env.R2_ACCESS_KEY_ID!
 const R2_SECRET_ACCESS_KEY = process.env.R2_SECRET_ACCESS_KEY!
+const R2_ACCOUNT_ID = process.env.R2_ACCOUNT_ID!
 const R2_PRIVATE_BUCKET = process.env.R2_PRIVATE_BUCKET!
 const R2_PUBLIC_BUCKET = process.env.R2_PUBLIC_BUCKET!
 const R2_PUBLIC_BUCKET_PUBLIC_URL = process.env.R2_PUBLIC_BUCKET_PUBLIC_URL!
-const R2_ACCOUNT_ID = process.env.R2_ACCOUNT_ID!
+const R2_PRIVATE_BUCKET_PUBLIC_URL = process.env.R2_PRIVATE_BUCKET_PUBLIC_URL!
 
 test.group('R2 driver | put', (group) => {
   group.each.timeout(6000)
@@ -147,6 +148,34 @@ test.group('R2 driver | put', (group) => {
     assert.equal(contents.toString(), 'hello world')
 
     await driver.bucket(R2_PUBLIC_BUCKET).delete(fileName)
+  })
+
+  test('switch/set public url at runtime', async ({ assert, client }) => {
+    const config: R2DriverConfig = {
+      key: R2_ACCESS_KEY_ID,
+      secret: R2_SECRET_ACCESS_KEY,
+      bucket: R2_PUBLIC_BUCKET,
+      accountId: R2_ACCOUNT_ID,
+      driver: 'r2' as const,
+      visibility: 'public' as const,
+      cdnUrl: R2_PRIVATE_BUCKET_PUBLIC_URL,
+    }
+    const fileName = `${string.generateRandom(10)}.txt`
+
+    let driver = new R2Driver(config, logger)
+
+    await driver.put(fileName, 'hello world')
+
+    const incorrectUrl = await driver.getUrl(fileName)
+    const response = await client.get(incorrectUrl)
+    response.assertStatus(401)
+
+    const correctDriver = driver.publicUrl(R2_PUBLIC_BUCKET_PUBLIC_URL)
+
+    const contents = await correctDriver.get(fileName)
+    assert.equal(contents.toString(), 'hello world')
+
+    await correctDriver.delete(fileName)
   })
 })
 

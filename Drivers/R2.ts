@@ -286,15 +286,17 @@ export class R2Driver implements R2DriverContract {
   /**
    * Returns URL to a given path
    */
-  public async getUrl(location: string): Promise<string> {
+  public async getUrl(location: string) {
     /**
      * Use the CDN URL if defined
      */
     if (this.config.cdnUrl) {
-      return `${this.config.cdnUrl}/${location}`
+      return Promise.resolve(`${this.config.cdnUrl}/${location}`)
     }
 
-    return `https://${this.config.bucket}.${this.config.accountId}.r2.cloudflarestorage.com/${location}`
+    return Promise.resolve(
+      `https://${this.config.bucket}.${this.config.accountId}.r2.cloudflarestorage.com/${location}`
+    )
   }
 
   /**
