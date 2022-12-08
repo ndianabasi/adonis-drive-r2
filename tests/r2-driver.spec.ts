@@ -36,7 +36,7 @@ const R2_PUBLIC_BUCKET_PUBLIC_URL = process.env.R2_PUBLIC_BUCKET_PUBLIC_URL!
 const R2_PRIVATE_BUCKET_PUBLIC_URL = process.env.R2_PRIVATE_BUCKET_PUBLIC_URL!
 
 test.group('R2 driver | put', (group) => {
-  group.each.timeout(6000)
+  group.each.timeout(10000)
 
   test('write file to the destination', async ({ assert }) => {
     const config: R2DriverConfig = {
@@ -184,7 +184,7 @@ test.group('R2 driver | putStream', (group) => {
     await fs.cleanup()
   })
 
-  group.each.timeout(6000)
+  group.each.timeout(10000)
 
   test('write file to the destination', async ({ assert }) => {
     const config: R2DriverConfig = {
@@ -285,7 +285,7 @@ test.group('S3 Drive | moveToDisk', (group) => {
     await fs.cleanup()
   })
 
-  group.each.timeout(6000)
+  group.each.timeout(10000)
 
   test('upload small files', async ({ assert }) => {
     const config: R2DriverConfig = {
@@ -347,7 +347,7 @@ test.group('R2 driver | multipartStream', (group) => {
     await fs.cleanup()
   })
 
-  group.each.timeout(6000)
+  group.each.timeout(10000)
 
   test('write file to the destination', async ({ assert }) => {
     const config: R2DriverConfig = {
@@ -446,7 +446,7 @@ test.group('R2 driver | multipartStream', (group) => {
 })
 
 test.group('R2 driver | exists', (group) => {
-  group.each.timeout(6000)
+  group.each.timeout(10000)
 
   test('return true when a file exists', async ({ assert }) => {
     const config: R2DriverConfig = {
@@ -524,7 +524,7 @@ test.group('R2 driver | delete', (group) => {
     await fs.cleanup()
   })
 
-  group.each.timeout(6000)
+  group.each.timeout(10000)
 
   test('remove file', async ({ assert }) => {
     const config: R2DriverConfig = {
@@ -583,7 +583,7 @@ test.group('R2 driver | copy', (group) => {
     await fs.cleanup()
   })
 
-  group.each.timeout(6000)
+  group.each.timeout(10000)
 
   test('copy file from within the disk root', async ({ assert }) => {
     const config: R2DriverConfig = {
@@ -714,7 +714,7 @@ test.group('R2 driver | move', (group) => {
     await fs.cleanup()
   })
 
-  group.each.timeout(6000)
+  group.each.timeout(10000)
 
   test('move file from within the disk root', async ({ assert }) => {
     const config: R2DriverConfig = {
@@ -845,7 +845,7 @@ test.group('R2 driver | get', (group) => {
     await fs.cleanup()
   })
 
-  group.each.timeout(6000)
+  group.each.timeout(10000)
 
   test('get file contents', async ({ assert }) => {
     const config: R2DriverConfig = {
@@ -924,7 +924,7 @@ test.group('R2 driver | getStats', (group) => {
     await fs.cleanup()
   })
 
-  group.each.timeout(6000)
+  group.each.timeout(10000)
 
   test('get file stats', async ({ assert }) => {
     const config: R2DriverConfig = {
@@ -975,7 +975,7 @@ test.group('R2 driver | getVisibility', (group) => {
     await fs.cleanup()
   })
 
-  group.each.timeout(6000)
+  group.each.timeout(10000)
 
   test('get visibility for private file', async ({ assert }) => {
     const config: R2DriverConfig = {
@@ -1046,7 +1046,7 @@ test.group('R2 driver | getUrl', (group) => {
     await fs.cleanup()
   })
 
-  group.each.timeout(6000)
+  group.each.timeout(10000)
 
   test('get url to a given file', async ({ assert, client }) => {
     const config: R2DriverConfig = {
@@ -1098,7 +1098,7 @@ test.group('R2 driver | getSignedUrl', (group) => {
     await fs.cleanup()
   })
 
-  group.each.timeout(6000)
+  group.each.timeout(10000)
 
   test('get signed url to a file in private disk', async ({ assert, client }) => {
     assert.plan(1)
