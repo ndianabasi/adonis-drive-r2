@@ -6,7 +6,7 @@
   "files": [
     "build/adonis-typings",
     "build/instructions.md",
-    "build/src",
+    "build/Drivers",
     "build/providers"
   ],
   "types": "build/adonis-typings/index.d.ts",
