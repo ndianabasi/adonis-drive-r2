@@ -7,7 +7,7 @@
  * file that was distributed with this source code.
  */
 
-import { R2Driver } from '../src/Drivers/R2'
+import { R2Driver } from '../Drivers/R2'
 import { ApplicationContract } from '@ioc:Adonis/Core/Application'
 
 export default class S3Provider {
