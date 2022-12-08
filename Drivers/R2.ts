@@ -58,6 +58,10 @@ export class R2Driver implements R2DriverContract {
   public name: 'r2' = 'r2'
 
   constructor(private config: R2DriverConfig, private logger: LoggerContract) {
+    if (this.config.visibility === 'public' && !this.config.cdnUrl) {
+      throw new Error("The bucket's public URL is required when the bucket is public")
+    }
+
     /**
      * Use the top level key and secret to define AWS credentials
      */
@@ -156,11 +160,20 @@ export class R2Driver implements R2DriverContract {
   }
 
   /**
-   * Returns a new instance of the s3 driver with a custom runtime
-   * bucket
+   * Set a new bucket at runtime and return a new driver instance
    */
   public bucket(bucket: string): R2Driver {
     return new R2Driver(Object.assign({}, this.config, { bucket }), this.logger)
+  }
+
+  /**
+   * Set a new public url at runtime and return a new driver instance
+   */
+  public publicUrl(url: string): R2Driver {
+    return new R2Driver(
+      Object.assign({}, this.config, { cdnUrl: url } as R2DriverConfig),
+      this.logger
+    )
   }
 
   /**
