@@ -1,6 +1,6 @@
 {
   "name": "adonis-drive-r2",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "R2 driver for AdonisJS drive",
   "main": "build/providers/R2Provider.js",
   "files": [
