@@ -20,7 +20,7 @@
     "build": "npm run compile",
     "prepublishOnly": "npm run build",
     "sync-labels": "github-label-sync --labels ./node_modules/@adonisjs/mrm-preset/gh-labels.json ndianabasi/adonis-drive-r2",
-    "release": "np --message=\"chore(release): %s\"",
+    "release": "np",
     "version": "npm run build",
     "format": "prettier --write --cache .",
     "commit": "git-cz"
@@ -89,9 +89,15 @@
   "eslintIgnore": [
     "build"
   ],
-  "np": {
+    "np": {
+    "yarn": false,
+    "yolo": true,
     "contents": ".",
-    "anyBranch": false
+    "anyBranch": false,
+    "publish": true,
+    "branch": "main",
+    "releaseDraft": true,
+    "message": "chore: bump version to %s 🚀"
   },
   "prettier": {
     "trailingComma": "es5",
