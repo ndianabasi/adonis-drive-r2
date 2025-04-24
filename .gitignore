@@ -14,3 +14,4 @@ dist
 shrinkwrap.yaml
 .env
 .eslintcache
+.yarn/install-state.gz

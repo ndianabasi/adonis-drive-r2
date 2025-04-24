@@ -34,6 +34,7 @@ const R2_PRIVATE_BUCKET = process.env.R2_PRIVATE_BUCKET!
 const R2_PUBLIC_BUCKET = process.env.R2_PUBLIC_BUCKET!
 const R2_PUBLIC_BUCKET_PUBLIC_URL = process.env.R2_PUBLIC_BUCKET_PUBLIC_URL!
 const R2_PRIVATE_BUCKET_PUBLIC_URL = process.env.R2_PRIVATE_BUCKET_PUBLIC_URL!
+const R2_OVERRIDE_ENDPOINT = process.env.R2_OVERRIDE_ENDPOINT
 
 test.group('R2 driver | put', (group) => {
   group.each.timeout(10000)
@@ -69,6 +70,28 @@ test.group('R2 driver | put', (group) => {
       accountId: R2_ACCOUNT_ID,
       driver: 'r2' as const,
       visibility: 'private' as const,
+    }
+    const fileName = `bar/baz/${string.generateRandom(10)}.txt`
+
+    const driver = new R2Driver(config, logger)
+    await driver.put(fileName, 'hello world')
+
+    const contents = await driver.get(fileName)
+    assert.equal(contents.toString(), 'hello world')
+
+    await driver.delete(fileName)
+  })
+
+  test('write to nested path when endpoint is overridden', async ({ assert }) => {
+    const config: R2DriverConfig = {
+      key: R2_ACCESS_KEY_ID,
+      secret: R2_SECRET_ACCESS_KEY,
+      bucket: R2_PRIVATE_BUCKET,
+      accountId: R2_ACCOUNT_ID,
+      driver: 'r2' as const,
+      visibility: 'private' as const,
+      endpoint: R2_OVERRIDE_ENDPOINT,
+      region: 'us-east-1',
     }
     const fileName = `bar/baz/${string.generateRandom(10)}.txt`
 
@@ -544,6 +567,26 @@ test.group('R2 driver | delete', (group) => {
     assert.isFalse(await driver.exists(fileName))
   })
 
+  test('remove file when endpoint is overridden', async ({ assert }) => {
+    const config: R2DriverConfig = {
+      key: R2_ACCESS_KEY_ID,
+      secret: R2_SECRET_ACCESS_KEY,
+      bucket: R2_PRIVATE_BUCKET,
+      accountId: R2_ACCOUNT_ID,
+      driver: 'r2' as const,
+      visibility: 'private' as const,
+      endpoint: R2_OVERRIDE_ENDPOINT,
+      region: 'us-east-1',
+    }
+    const fileName = `${string.generateRandom(10)}.txt`
+
+    const driver = new R2Driver(config, logger)
+    await driver.put(fileName, 'bar')
+    await driver.delete(fileName)
+
+    assert.isFalse(await driver.exists(fileName))
+  })
+
   test('do not throw error when trying to remove a non-existing file', async ({ assert }) => {
     const config: R2DriverConfig = {
       key: R2_ACCESS_KEY_ID,
@@ -877,6 +920,39 @@ test.group('R2 driver | get', (group) => {
       accountId: R2_ACCOUNT_ID,
       driver: 'r2' as const,
       visibility: 'private' as const,
+    }
+    const fileName = `${string.generateRandom(10)}.txt`
+
+    const driver = new R2Driver(config, logger)
+    await driver.put(fileName, 'hello world')
+
+    const stream = await driver.getStream(fileName)
+    assert.instanceOf(stream, Readable)
+
+    stream.on('data', (chunk) => {
+      assert.equal(chunk, 'hello world')
+    })
+    stream.on('end', async () => {
+      await driver.delete(fileName)
+      done()
+    })
+    stream.on('error', (error) => {
+      done(error)
+    })
+  }).waitForDone()
+
+  test('get file contents as a stream when endpoint is overridden', async ({ assert }, done) => {
+    assert.plan(2)
+
+    const config: R2DriverConfig = {
+      key: R2_ACCESS_KEY_ID,
+      secret: R2_SECRET_ACCESS_KEY,
+      bucket: R2_PRIVATE_BUCKET,
+      accountId: R2_ACCOUNT_ID,
+      driver: 'r2' as const,
+      visibility: 'private' as const,
+      endpoint: R2_OVERRIDE_ENDPOINT,
+      region: 'us-east-1',
     }
     const fileName = `${string.generateRandom(10)}.txt`
 

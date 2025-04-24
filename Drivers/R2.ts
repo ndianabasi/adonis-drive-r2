@@ -72,8 +72,17 @@ export class R2Driver implements R2DriverContract {
       }
     }
 
-    this.config.endpoint = `https://${this.config.accountId}.r2.cloudflarestorage.com`
-    this.config.region = 'auto'
+    /**
+     * Allow override of the Cloudflare R2 endpoint, especially for development
+     * purposes with services like Localstack.
+     */
+    this.config.endpoint =
+      this.config.endpoint || `https://${this.config.accountId}.r2.cloudflarestorage.com`
+    /**
+     * Allow override of the Cloudflare R2 region, especially for development
+     * purposes with services like Localstack.
+     */
+    this.config.region = this.config.region || 'auto'
 
     this.adapter = new S3Client(this.config)
   }
@@ -123,7 +132,7 @@ export class R2Driver implements R2DriverContract {
       adapterOptions.ACL = 'private'
     }
 
-    this.logger.trace(adapterOptions, '@drive/s3 write options')
+    this.logger.trace(adapterOptions, '@adonis-drive-r2 write options')
     return adapterOptions
   }
 
@@ -155,7 +164,7 @@ export class R2Driver implements R2DriverContract {
       contentHeaders['ResponseCacheControl'] = cacheControl
     }
 
-    this.logger.trace(contentHeaders, '@drive/s3 content headers')
+    this.logger.trace(contentHeaders, '@adonis-drive-r2 content headers')
     return contentHeaders
   }
 
